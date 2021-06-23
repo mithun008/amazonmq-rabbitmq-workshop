@@ -13,12 +13,20 @@ Metadata:
         Parameters:
           - AmazonMQBrokerUser
           - AmazonMQBrokerPassword
+      - Label:
+          default: Lab Configuration
+        Parameters:
+          - EnvironmentOwnerType
+
     ParameterLabels:
       AmazonMQBrokerUser:
         default: Broker Username
       AmazonMQBrokerPassword:
         default: Broker Password
-      
+      EnvironmentOwnerType:
+        default: Environment Type
+    
+     
 Parameters:
   CIDR:
     Description: CIDR block, from which the access to the EC2 instance is allowed.
@@ -30,15 +38,33 @@ Parameters:
   AmazonMQBrokerUser:
     Description: The user to access the Amazon MQ broker.
     Type: String
-    Default: admin
+    Default: workshopUser
     MinLength: 2
     ConstraintDescription: The Amazon MQ broker user is required.
   AmazonMQBrokerPassword:
     Description: The password to access the Amazon MQ broker. Min 12 characters
     Type: String
+    Default: workshopPassw0rd
     MinLength: 12
     ConstraintDescription: The Amazon MQ broker password is required.
     NoEcho: true
+    
+  EnvironmentOwnerType:
+    Type: String
+    AllowedValues:
+      - user
+      - assumed-role
+    Default: assumed-role
+    Description: >-
+      Type of access the owner of environment has.  The default is an assumed-role
+      which is used by the workshop event engine.  If testing this in your own account this should
+      be "user".
+Conditions:
+  UseAssumedRole:
+    Fn::Equals:
+      - !Ref EnvironmentOwnerType
+      - assumed-role
+
 
 Resources:
   VPC:
@@ -296,6 +322,16 @@ Resources:
         - - Ref: AWS::StackName
           - MQClient
       SubnetId: !Ref 'PublicSubnet1'
+      Repositories:
+        - PathComponent: /amazon-mq-workshop
+          RepositoryUrl: https://github.com/mithun008/amazonmq-rabbitmq-workshop.git
+      SubnetId: !Ref 'PublicSubnet1'
+      OwnerArn: 
+        Fn::If:
+          - UseAssumedRole
+          - !Sub "arn:aws:sts::${AWS::AccountId}:assumed-role/TeamRole/MasterKey"
+          - !Ref "AWS::NoValue"
+
       
 
 Outputs:
