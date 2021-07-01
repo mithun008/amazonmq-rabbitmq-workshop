@@ -5,7 +5,7 @@ chmod u+x rabbitmqadmin
 sudo pip install pika
 
 echo BROKER_ENDPOINT=$(aws cloudformation describe-stacks \
-    --stack-name amqrabbitmqworkshop \
+    --stack-name mod-913125baebaa45b4 \
     --query 'Stacks[].Outputs[?OutputKey==`PrivateBrokerEndpoint`].OutputValue' \
     --output text) >> ~/.bashrc; 
     
