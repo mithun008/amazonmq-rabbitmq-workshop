@@ -12,6 +12,10 @@ echo BROKER_ENDPOINT=$(aws cloudformation describe-stacks \
 echo BROKER_USER='<<REPLACE_WITH_BROKER_USER>>' >> ~/.bashrc; 
 echo BROKER_PASSWORD='<<REPLACE_WITH_BROKER_PASSWORD>>' >> ~/.bashrc;  
 
+echo PUBLIC_BROKER_ENDPOINT=$(aws cloudformation describe-stacks \
+    --stack-name mod-913125baebaa45b4 \
+    --query 'Stacks[].Outputs[?OutputKey==`PublicBrokerEndpoint`].OutputValue' \
+    --output text) >> ~/.bashrc; 
 
 
 source ~/.bashrc
