@@ -310,6 +310,23 @@ Resources:
             Username: !Ref 'AmazonMQBrokerUser'
             Password: !Ref 'AmazonMQBrokerPassword'
 
+  MQBrokerUserPasswordSecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Name: MQBrokerUserPasswordSecret
+      Description: "Secret for accessing a queue on the ActiveMQ broker."
+      SecretString: !Join
+        - ''
+        - - '{'
+          - '"username"'
+          - ':'
+          - !Ref 'AmazonMQBrokerUser'
+          - ','
+          - '"password"'
+          - ':'
+          - !Ref 'AmazonMQBrokerPassword'
+          - '}' 
+  
   C9MQClient:
     Type: AWS::Cloud9::EnvironmentEC2
     Properties:
@@ -324,7 +341,7 @@ Resources:
       SubnetId: !Ref 'PublicSubnet1'
       Repositories:
         - PathComponent: /amazon-mq-workshop
-          RepositoryUrl: https://github.com/mithun008/amazonmq-rabbitmq-workshop.git
+          RepositoryUrl: https://github.com/nikhilpenmetsa/amazonmq-rabbitmq-workshop.git
       SubnetId: !Ref 'PublicSubnet1'
       OwnerArn: 
         Fn::If:
