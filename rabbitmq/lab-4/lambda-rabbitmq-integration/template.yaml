@@ -20,6 +20,7 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       FunctionName: MQReceiverFunction
+      Description: A function to read messages from a RabbitMQ queue
       CodeUri: src/
       Handler: app.lambda_handler
       Runtime: python3.6
@@ -45,7 +46,7 @@ Resources:
           Properties:
             Broker: !Ref brokerARNParameter
             Queues:
-              - "lambdaLabQueue2"
+              - "lambdaLabQueue"
             SourceAccessConfigurations:
               - Type: BASIC_AUTH
                 URI: !Ref secretARNParameter
