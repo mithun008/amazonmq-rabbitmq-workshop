@@ -15,13 +15,13 @@ privateBrokerEndpoint=`aws mq describe-broker --broker-id $privateBrokerId | jq 
 publicBrokerId=`aws mq list-brokers | jq '.BrokerSummaries[] | select(.BrokerName=="RabbitWorkshopBrokerPublic") | {id:.BrokerId}' | grep "id" | cut -d '"' -f4`
 publicBrokerEndpoint=`aws mq describe-broker --broker-id $publicBrokerId | jq -r '.BrokerInstances[] | .ConsoleURL | split("//")[1]'`
 
+brokerUser=`aws secretsmanager get-secret-value --secret-id $secretArn | jq -r '.SecretString' | tr -d '{}' | sed 's/"//g' | cut -d',' -f1 | cut -d':' -f2`
+brokerPassword=`aws secretsmanager get-secret-value --secret-id $secretArn | jq -r '.SecretString' | tr -d '{}' | sed 's/"//g' | cut -d',' -f2 | cut -d':' -f2`
 
 echo BROKER_ENDPOINT=$privateBrokerEndpoint >> ~/.bashrc;
 echo PUBLIC_BROKER_ENDPOINT=$publicBrokerEndpoint >> ~/.bashrc; 
 
-
-echo BROKER_USER='workshopuser' >> ~/.bashrc; 
-echo BROKER_PASSWORD='workshopPassw0rd' >> ~/.bashrc;  
-
+echo BROKER_USER=$brokerUser >> ~/.bashrc; 
+echo BROKER_PASSWORD=$brokerPassword >> ~/.bashrc;  
 
 source ~/.bashrc
