@@ -341,7 +341,7 @@ Resources:
       SubnetId: !Ref 'PublicSubnet1'
       Repositories:
         - PathComponent: /amazon-mq-workshop
-          RepositoryUrl: https://github.com/nikhilpenmetsa/amazonmq-rabbitmq-workshop.git
+          RepositoryUrl: https://github.com/mithun008/amazonmq-rabbitmq-workshop.git
       SubnetId: !Ref 'PublicSubnet1'
       OwnerArn: 
         Fn::If:
