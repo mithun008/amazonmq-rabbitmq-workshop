@@ -15,6 +15,7 @@ privateBrokerEndpoint=`aws mq describe-broker --broker-id $privateBrokerId | jq 
 publicBrokerId=`aws mq list-brokers | jq '.BrokerSummaries[] | select(.BrokerName=="RabbitWorkshopBrokerPublic") | {id:.BrokerId}' | grep "id" | cut -d '"' -f4`
 publicBrokerEndpoint=`aws mq describe-broker --broker-id $publicBrokerId | jq -r '.BrokerInstances[] | .ConsoleURL | split("//")[1]'`
 
+secretArn=`aws secretsmanager list-secrets --filters Key=name,Values=MQBrokerUserPasswordSecret | jq '.SecretList[] | {ARN}' | grep 'ARN' | cut -d '"' -f4`
 brokerUser=`aws secretsmanager get-secret-value --secret-id $secretArn | jq -r '.SecretString' | tr -d '{}' | sed 's/"//g' | cut -d',' -f1 | cut -d':' -f2`
 brokerPassword=`aws secretsmanager get-secret-value --secret-id $secretArn | jq -r '.SecretString' | tr -d '{}' | sed 's/"//g' | cut -d',' -f2 | cut -d':' -f2`
 
