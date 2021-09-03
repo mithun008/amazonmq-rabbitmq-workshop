@@ -19,10 +19,10 @@ secretArn=`aws secretsmanager list-secrets --filters Key=name,Values=MQBrokerUse
 brokerUser=`aws secretsmanager get-secret-value --secret-id $secretArn | jq -r '.SecretString' | tr -d '{}' | sed 's/"//g' | cut -d',' -f1 | cut -d':' -f2`
 brokerPassword=`aws secretsmanager get-secret-value --secret-id $secretArn | jq -r '.SecretString' | tr -d '{}' | sed 's/"//g' | cut -d',' -f2 | cut -d':' -f2`
 
-echo BROKER_ENDPOINT=$privateBrokerEndpoint >> ~/.bashrc;
-echo PUBLIC_BROKER_ENDPOINT=$publicBrokerEndpoint >> ~/.bashrc; 
+echo export BROKER_ENDPOINT=$privateBrokerEndpoint >> ~/.bashrc;
+echo export PUBLIC_BROKER_ENDPOINT=$publicBrokerEndpoint >> ~/.bashrc; 
 
-echo BROKER_USER=$brokerUser >> ~/.bashrc; 
-echo BROKER_PASSWORD=$brokerPassword >> ~/.bashrc;  
+echo export BROKER_USER=$brokerUser >> ~/.bashrc; 
+echo export BROKER_PASSWORD=$brokerPassword >> ~/.bashrc;  
 
 source ~/.bashrc
