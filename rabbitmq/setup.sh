@@ -26,3 +26,17 @@ echo export BROKER_USER=$brokerUser >> ~/.bashrc;
 echo export BROKER_PASSWORD=$brokerPassword >> ~/.bashrc;  
 
 source ~/.bashrc
+
+echo "Installing Python 3.9..."
+
+sudo yum install wget -y
+
+wget https://www.python.org/ftp/python/3.9.13/Python-3.9.13.tgz
+
+tar xvf Python-3.9.13.tgz
+
+cd Python-3.9*/
+
+./configure --enable-optimizations
+
+sudo make altinstall
